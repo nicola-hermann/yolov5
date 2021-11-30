@@ -435,6 +435,7 @@ class AutoShape(nn.Module):
     iou = 0.45  # NMS IoU threshold
     classes = None  # (optional list) filter by class, i.e. = [0, 15, 16] for COCO persons, cats and dogs
     multi_label = False  # NMS multiple labels per box
+    agnostic = False # class agnostic NMS
     max_det = 1000  # maximum number of detections per image
 
     def __init__(self, model):
@@ -503,7 +504,7 @@ class AutoShape(nn.Module):
 
             # Post-process
             y = non_max_suppression(y, self.conf, iou_thres=self.iou, classes=self.classes,
-                                    multi_label=self.multi_label, max_det=self.max_det)  # NMS
+                                    multi_label=self.multi_label, agnostic = self.agnostic, max_det=self.max_det)  # NMS
             for i in range(n):
                 scale_coords(shape1, y[i][:, :4], shape0[i])
 
